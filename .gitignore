@@ -3,3 +3,6 @@
 *.pyc
 *.xml
 *.iml
+*.csv
+*.fasta
+*.fa
