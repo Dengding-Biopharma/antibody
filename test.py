@@ -34,14 +34,12 @@ def get_kmer_count_from_sequence(sequence, k=3):
     # dict to store kmers
     kmers = {}
 
-    # count how many times each occurred in this sequence (treated as cyclic)
     for i in range(0, len(sequence)):
         kmer = sequence[i:i + k]
 
         if len(kmer) != k:
             break
 
-        # count occurrence of this kmer in sequence
         if kmer in kmers:
             kmers[kmer] += 1
         else:
@@ -51,7 +49,7 @@ def get_kmer_count_from_sequence(sequence, k=3):
 
 
 
-
+k = 4
 sequences = []
 for root, dir, files in os.walk('avastin/avastin'):
     root = root + '/'
@@ -65,15 +63,13 @@ for root, dir, files in os.walk('avastin/avastin'):
 
 kmers_dic = {}
 for sequence in sequences:
-    kmer = get_kmer_count_from_sequence(sequence, k=3)
+    kmer = get_kmer_count_from_sequence(sequence, k=k)
     kmers_dic = dict(Counter(kmers_dic) + Counter(kmer))
-print('共有 {} 个kmer！！！！'.format(len(kmers_dic)))
+print('共有 {} 个kmer(k = {})！！！！'.format(len(kmers_dic),k))
 
 
 nodes = []
 for kmer in kmers_dic:
-    print(kmer)
-    quit()
     nodes.append(node(kmer))
 
 for i in trange(len(nodes)):
