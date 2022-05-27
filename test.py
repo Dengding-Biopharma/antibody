@@ -50,6 +50,28 @@ def get_kmer_count_from_sequence(sequence, k=3):
     return kmers
 
 
+def get_debruijn_edges_from_kmers(kmers):
+    """
+    Every possible (k-1)mer (n-1 suffix and prefix of kmers) is assigned
+    to a node, and we connect one node to another if the (k-1)mer overlaps
+    another. Nodes are (k-1)mers, edges are kmers.
+    """
+    # store edges as tuples in a set
+    edges = set()
+
+    # compare each (k-1)mer
+    for k1 in kmers:
+        for k2 in kmers:
+            if k1 != k2:
+                # if they overlap then add to edges
+                if k1[1:] == k2[:-1]:
+                    edges.add((k1[:-1], k2[:-1]))
+                if k1[:-1] == k2[1:]:
+                    edges.add((k2[:-1], k1[:-1]))
+
+    return edges
+
+
 
 k = 4
 sequences = []
@@ -77,12 +99,10 @@ for kmer in kmers_dic:
 for i in trange(len(nodes)):
     for node_1 in nodes:
         for node_2 in nodes:
-            if node_1 != node_2:
-                if node_1.getNextMatch() == node_2.getPreviousMatch():
-                    print(node_1.getKmer(),node_2.getKmer())
+            if node_1.sequence != node_2.sequence:
+                if node_1.sequence[1:] == node_2.sequence[:-1]:
                     node_1.addNext(node_2)
-                if node_1.getPreviousMatch() == node_2.getNextMatch():
-                    print(node_1.getKmer(), node_2.getKmer())
+                if node_1.sequence[:-1] == node_2.sequence[1:]:
                     node_1.addPrevious(node_2)
 
 
