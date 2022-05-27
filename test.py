@@ -63,15 +63,17 @@ for root, dir, files in os.walk('avastin/avastin'):
         temp = temp[temp['PPM Difference']<50]
         sequences.extend(temp['DENOVO'].values)
 
-kmers = {}
+kmers_dic = {}
 for sequence in sequences:
     kmer = get_kmer_count_from_sequence(sequence, k=3)
-    kmers = dict(Counter(kmers) + Counter(kmer))
-print('共有 {} 个kmer！！！！'.format(len(kmers)))
-quit()
+    kmers_dic = dict(Counter(kmers_dic) + Counter(kmer))
+print('共有 {} 个kmer！！！！'.format(len(kmers_dic)))
+
 
 nodes = []
-for kmer in kmers:
+for kmer in kmers_dic:
+    print(kmer)
+    quit()
     nodes.append(node(kmer))
 
 for i in trange(len(nodes)):
