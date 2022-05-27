@@ -86,7 +86,7 @@ for root, dir, files in os.walk('avastin/avastin'):
 
 inputs1 = sequences_scores
 delList = []
-print(1111111111,inputs1)
+
 for i in inputs1:
     if 'LLLLLL' in i[0]:
         delList.append(i)
@@ -123,8 +123,8 @@ for i in inputs1:
 
 pathkmer1 = []
 lengthList = []
-
-for a in range(8):
+print(len(inputsBefore))
+for a in trange(8):
 
     inputskmer = []
 
