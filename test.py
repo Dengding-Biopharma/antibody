@@ -25,6 +25,8 @@ class node:
     def addPrevious(self,node):
         self.previous.append(node)
 
+    def getKmer(self):
+        return self.sequence
 
 def get_kmer_count_from_sequence(sequence, k=3):
     """
@@ -77,8 +79,10 @@ for i in trange(len(nodes)):
         for node_2 in nodes:
             if node_1 != node_2:
                 if node_1.getNextMatch() == node_2.getPreviousMatch():
+                    print(node_1.getKmer(),node_2.getKmer())
                     node_1.addNext(node_2)
                 if node_1.getPreviousMatch() == node_2.getNextMatch():
+                    print(node_1.getKmer(), node_2.getKmer())
                     node_1.addPrevious(node_2)
 
 
