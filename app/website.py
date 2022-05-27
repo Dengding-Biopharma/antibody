@@ -49,7 +49,6 @@ def file_uploader(output=''):
         output += '<div class="container"><table class="table"> <thead><tr><th>Name</th><th>Length</th><th>Assembly</th></tr></thead><tbody>'
 
         for name, f in fileSort.items():
-            print(name)
             # generate html result
             path = findPath.path(f)
             # turn result into html code then pass into template

@@ -65,7 +65,7 @@ def path(filelist):
     for i in inputs1:
         if len(i[0]) > 5:
             inputsBefore.append(i)
-
+    print(inputsBefore)
     # graphkmer = debruijn.DeBruijnGraph(inputsBefore, 5)
     # pathkmer = graphkmer.longestPath()
     # removeList = []
@@ -89,9 +89,9 @@ def path(filelist):
         for i in inputsBefore:
             if len(i[0]) > (5+a):
                 inputskmer.append(i)
+        print(123123,inputskmer)
         graphkmer = debruijn.DeBruijnGraph(inputskmer, 5+a)
         pathkmer = graphkmer.longestPath()
-
 
         removeList = []
         inputsBefore = []
@@ -113,11 +113,17 @@ def path(filelist):
         for i in pathkmer:
             lengthList.append(i[0])
 
+        for i in pathkmer:
+            pathkmer1.append([i[0],i[1][0]])
+
+
+    pathkmer1.sort(key=lambda x:x[0])
+
     lengthList.sort()
 
-    for i in lengthList:
-        for j in pathkmer:
-            if i == j[0]:
-                pathkmer1.append([j[0], j[1][0]])
+    # for i in lengthList:
+    #     for j in pathkmer:
+    #         if i == j[0]:
+    #             pathkmer1.append([j[0], j[1][0]])
 
     return pathkmer1
