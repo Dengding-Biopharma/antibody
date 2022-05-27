@@ -1,3 +1,5 @@
+from collections import Counter
+
 import pandas as pd
 import os
 
@@ -48,20 +50,23 @@ def get_kmer_count_from_sequence(sequence, k=3):
     return kmers
 
 
+
+
 sequences = []
 for root, dir, files in os.walk('avastin/avastin'):
     root = root + '/'
     for file in files:
         filename = root + file
         data = pd.read_csv(filename, delimiter='\t')
-        sequences.extend(data['DENOVO'].values)
+        temp = data[data['Score']>0.5]
+        temp = temp[-50<temp['PPM Difference']]
+        temp = temp[temp['PPM Difference']<50]
+        sequences.extend(temp['DENOVO'].values)
 
-kmers = []
+kmers = {}
 for sequence in sequences:
-    kmer = get_kmer_count_from_sequence(sequence, k=4)
-    for item in list(kmer.keys()):
-        if item not in kmers:
-            kmers.append(item)
+    kmer = get_kmer_count_from_sequence(sequence, k=3)
+    kmers = dict(Counter(kmers) + Counter(kmer))
 print('共有 {} 个kmer！！！！'.format(len(kmers)))
 quit()
 
