@@ -44,7 +44,7 @@ def path(filelist):
 
     inputs1 = inputs
     delList = []
-
+    print(1111111111,inputs)
     for i in inputs1:
         if 'LLLLLL' in i[0]:
             delList.append(i)
@@ -63,9 +63,9 @@ def path(filelist):
     inputsBefore = []
 
     for i in inputs1:
-        if len(i[0]) > 5:
+        if len(i[0]) > 4:
             inputsBefore.append(i)
-    print(inputsBefore)
+    # print(222222222222,inputsBefore)
     # graphkmer = debruijn.DeBruijnGraph(inputsBefore, 5)
     # pathkmer = graphkmer.longestPath()
     # removeList = []
@@ -82,15 +82,15 @@ def path(filelist):
     pathkmer1 = []
     lengthList = []
 
-    for a in range(10):
+    for a in range(8):
 
         inputskmer = []
 
         for i in inputsBefore:
-            if len(i[0]) > (5+a):
+            if len(i[0]) > (3+a):
                 inputskmer.append(i)
-        print(123123,inputskmer)
-        graphkmer = debruijn.DeBruijnGraph(inputskmer, 5+a)
+        # print(33333333333,inputskmer)
+        graphkmer = debruijn.DeBruijnGraph(inputskmer, 3+a)
         pathkmer = graphkmer.longestPath()
 
         removeList = []
