@@ -59,6 +59,7 @@ for kmer in kmers:
     nodes.append(node(kmer))
 
 for i in trange(len(nodes)):
+    continue
     for node_1 in nodes:
         for node_2 in nodes:
             if node_1 != node_2:
