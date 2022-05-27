@@ -23,19 +23,27 @@ class node:
     def addPrevious(self,node):
         self.previous.append(node)
 
+
 def get_kmer_count_from_sequence(sequence, k=3):
     """
     Returns dictionary with keys representing all possible kmers in a sequence
     and values counting their occurrence in the sequence.
     """
     # dict to store kmers
-    kmers = []
+    kmers = {}
 
+    # count how many times each occurred in this sequence (treated as cyclic)
     for i in range(0, len(sequence)):
         kmer = sequence[i:i + k]
+
         if len(kmer) != k:
             break
-        kmers.append(kmer)
+
+        # count occurrence of this kmer in sequence
+        if kmer in kmers:
+            kmers[kmer] += 1
+        else:
+            kmers[kmer] = 1
 
     return kmers
 
@@ -51,15 +59,17 @@ for root, dir, files in os.walk('avastin/avastin'):
 kmers = []
 for sequence in sequences:
     kmer = get_kmer_count_from_sequence(sequence, k=4)
-    kmers.extend(kmer)
-print(len(kmers))
+    for item in list(kmer.keys()):
+        if item not in kmers:
+            kmers.append(item)
+print('共有 {} 个kmer！！！！'.format(len(kmers)))
+quit()
 
 nodes = []
 for kmer in kmers:
     nodes.append(node(kmer))
 
 for i in trange(len(nodes)):
-    continue
     for node_1 in nodes:
         for node_2 in nodes:
             if node_1 != node_2:
