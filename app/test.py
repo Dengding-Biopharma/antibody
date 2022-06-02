@@ -1,12 +1,12 @@
-from collections import Counter
 
 import pandas as pd
 import os
 
 import toyplot
-import debruijn
-from tqdm import tqdm, trange
+from tqdm import trange
 
+import debruijn
+from collections import Counter
 
 
 
@@ -68,7 +68,7 @@ def plot_debruijn_graph(edges, width=500, height=500):
         layout=toyplot.layout.FruchtermanReingold(edges=toyplot.layout.CurvedEdges()))
     return graph
 
-k = 3
+
 sequences = []
 sequences_scores = []
 for root, dir, files in os.walk('avastin/avastin'):
@@ -83,56 +83,60 @@ for root, dir, files in os.walk('avastin/avastin'):
         sequences.extend(temp['DENOVO'].values)
         for i in range(len(temp)):
             sequences_scores.append([temp['DENOVO'][i],temp['Score'][i]])
+            sequences.append(temp['DENOVO'][i])
 
-inputs1 = sequences_scores
-delList = []
+list = Counter(sequences)
+inputs = []
+for (name,count) in list.items():
+    if count >= 2:
+        max_score = 0
+        for i in sequences_scores:
+            if name == i[0]:
+                if i[1] > max_score:
+                    max_score = i[1]
+    inputs.append([name,max_score])
 
-for i in inputs1:
-    if 'LLLLLL' in i[0]:
-        delList.append(i)
-    elif 'PPPPPP' in i[0]:
-        delList.append(i)
-    elif 'GGGGGG' in i[0]:
-        delList.append(i)
-    elif 'SSSSSS' in i[0]:
-        delList.append(i)
-    elif 'KKKKKK' in i[0]:
-        delList.append(i)
+print('number of inputs that appear twice: ',len(inputs))
 
-for i in delList:
-    inputs1.remove(i)
+
+# delList = []
+#
+# for i in inputs:
+#     if 'LLLLLL' in i[0]:
+#         delList.append(i)
+#     elif 'PPPPPP' in i[0]:
+#         delList.append(i)
+#     elif 'GGGGGG' in i[0]:
+#         delList.append(i)
+#     elif 'SSSSSS' in i[0]:
+#         delList.append(i)
+#     elif 'KKKKKK' in i[0]:
+#         delList.append(i)
+#
+# for i in delList:
+#     inputs.remove(i)
 
 inputsBefore = []
 
-for i in inputs1:
+for i in inputs:
     if len(i[0]) > 4:
         inputsBefore.append(i)
-    # print(222222222222,inputsBefore)
-    # graphkmer = debruijn.DeBruijnGraph(inputsBefore, 5)
-    # pathkmer = graphkmer.longestPath()
-    # removeList = []
-    # inputsBefore = []
 
-    # for i in inputsBefore:
-    #     for j in pathkmer:
-    #         if i[0] in j[1][0]:
-    #             removeList.append(i)
-
-    # for i in removeList:
-    #     inputsBefore.remove(i)
+print('number of inputs that are longer than 4: ',len(inputsBefore))
 
 pathkmer1 = []
 lengthList = []
-print(len(inputsBefore))
-for a in trange(8):
 
+
+for a in trange(8):
+    k = 3+a
     inputskmer = []
 
     for i in inputsBefore:
-        if len(i[0]) > (3+a):
+        if len(i[0]) > k:
             inputskmer.append(i)
-    # print(33333333333,inputskmer)
-    graphkmer = debruijn.DeBruijnGraph(inputskmer, 3+a)
+    print('number of inputs that are longer than k = {}: '.format(k),len(inputskmer))
+    graphkmer = debruijn.DeBruijnGraph(inputskmer, k)
     pathkmer = graphkmer.longestPath()
 
     removeList = []
@@ -143,8 +147,8 @@ for a in trange(8):
             if i[0] in j[1][0]:
                 removeList.append(i)
 
-    for i in removeList:
-        inputskmer.remove(i)
+    # for i in removeList:
+    #     inputskmer.remove(i)
 
     for i in inputskmer:
         inputsBefore.append(i)
@@ -161,6 +165,7 @@ for a in trange(8):
 
 pathkmer1.sort(key=lambda x:x[0])
 print(pathkmer1)
+
 # kmers_dic = {}
 # for sequence in sequences:
 #     kmer = get_kmer_count_from_sequence(sequence, k=k)
